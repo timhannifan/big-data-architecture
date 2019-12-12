@@ -26,7 +26,9 @@ cd ../serving-layer
 sh run.sh
 ```
 
+## To run on the cloud:
 
+1. 
 
 
 ### Grant rw permissions to hadoop project directory (run as root)

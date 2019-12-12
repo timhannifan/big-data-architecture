@@ -1,9 +1,9 @@
 # /bin/bash
 
 echo "Started batch layer ingestion"
-# sh get-data.sh
-# sh extract-data.sh
-# sh ingest-data.sh
+sh get-data.sh
+sh extract-data.sh
+sh ingest-data.sh
 echo "Completed batch ingestion"
 
 echo "Started batch layer Hive scripts"
