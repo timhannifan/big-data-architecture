@@ -1,45 +1,35 @@
 
 
-## To run locally:
+## About
+This repository contains code to consume Twosides, a comprehensive database of adverse side effects from pharmacological cobinations. The dataset is 4.3GB and contains around 72 million cobminations of drugs, side effects, and data-mined/FDA reported propensity scores for each tuplet.
 
-1. Copy to Docker container
+The intention is twofold: to demonstrate the layers of the lambda architecture, and to provide a scalable platform to do [research on this topic using matrix factorization and machine learning](https://github.com/timhannifan/drug-reaction-matrix-factorization).
+
+## To run from scratch on the cloud:
+
+1. Generate the batch layer: ingest csv to HDFS and use Hive to create batch views
 ```
-sudo docker cp big-data-architecture mpcs53014_container:/home/hadoop/
-```
-2. Login to container as root. Add permissions to app directory for hadoop user. Ensure xz-utils is installed.
-```
-sudo chown -R hadoop:hadoop /home/hadoop/big-data-architecture/
-sudo apt-get install xz-utils
-```
-3. Change to hadoop user and start services.
-```
-sudo su hadoop
-start-all.sh
-start-hbase.sh
-```
-4. Change to app directory and run layers.
-```
-cd big-data-architecture/batch-layer
+git clone https://github.com/timhannifan/big-data-architecture
+cd /big-data-architecture/src/batch-layer
 sh run.sh
+```
 
+2. Generate the serving layer: use Hive to create HBase tables for API consumption
+
+2. Create new column family in hbase for our daata
+```
+hbase shell
+> create 'hannifan_final', 'hannifan_interactions'
+```
+
+Then run the hive scripts to create HBase tables
+```
 cd ../serving-layer
 sh run.sh
 ```
 
-## To run on the cloud:
+3. Start Web application
+*Under construction*
 
-1. 
-
-
-### Grant rw permissions to hadoop project directory (run as root)
-
-sudo apt-get install xz-utils
-
-
-,drug_1_rxnorn_id,drug_1_concept_name,drug_2_rxnorm_id,drug_2_concept_name,condition_meddra_id,condition_concept_name,A,B,C,D,PRR,PRR_error,mean_reporting_frequency
-0,10355,Temazepam,136411,sildenafil,10003239,Arthralgia,7,149,24,1536,2.91667,0.421275,0.0448718
-
-
-
-
-42920392 rows
+4. Start Speed layer
+*Under construction*
