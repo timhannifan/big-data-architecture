@@ -2,6 +2,7 @@
 
 drop table if exists twosides_csv;
 create external table twosides_csv(
+  row_n string,
   drug_1_id smallint,
   drug_1_name string,
   drug_2_id smallint,
@@ -25,6 +26,6 @@ STORED AS TEXTFILE
   location '/inputs/hannifan_project';
 
 -- Run a test query to make sure the data was successfully stored
-select drug_1_name,drug_2_name,condition_name,mean_reporting_frequency from twosides_csv limit 5;
+select drug_1_name,drug_2_name,condition_name,prr from twosides_csv limit 5;
 
 
