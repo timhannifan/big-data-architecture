@@ -16,10 +16,10 @@ sh run.sh
 
 2. Generate the serving layer: use Hive to create HBase tables for API consumption
 
-2. Create new column family in hbase for our daata
+Create new column family in hbase for our daata
 ```
 hbase shell
-> create 'hannifan_final', 'hannifan_interactions'
+> create 'hannifan_final', 'interactions'
 ```
 
 Then run the hive scripts to create HBase tables
