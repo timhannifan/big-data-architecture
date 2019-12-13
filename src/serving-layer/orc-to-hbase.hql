@@ -28,7 +28,6 @@ select drug_1_name,
   prr_err,
   mean_reporting_frequency from twosides;
 
-
   -- Run a test query to make sure the data was successfully stored
 
 select * from hannifan_interactions limit 5;
