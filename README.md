@@ -11,16 +11,15 @@ The intention is twofold: to demonstrate the layers of the lambda architecture, 
 
 ## To run locally:
 
-1. Clone and copy to Docker container
+1. Clone and copy to Docker container.
 ```
-git clone https://github.com/timhannifan/big-data-architecture
+git clone https://github.com/timhannifan/big-data-architecture 
 cd big-data-architecture && run_docker.sh
-sudo docker cp big-data-architecture mpcs53014_container:/home/hadoop/
 ```
-2. Login to container as root. Add permissions to app directory for hadoop user. Ensure xz-utils is installed.
+2. Add permissions to app directory for hadoop user. Ensure xz-utils is installed.
 ```
-sudo chown -R hadoop:hadoop /home/hadoop/final_test/
 sudo apt-get install xz-utils
+sudo chown -R hadoop:hadoop /home/hadoop/application/
 ```
 3. Change to hadoop user and start services.
 ```
@@ -28,16 +27,29 @@ sudo su hadoop
 start-all.sh
 start-hbase.sh
 ```
-4. Change to app directory and run layers.
+4. Run the layers.
 ```
-cd big-data-architecture/batch-layer
-sh run.sh
+cd ~/application/batch-layer && sh run.sh
 
-cd ../serving-layer
-sh run.sh
+cd ~/application/serving-layer && sh run.sh
+
+# cd ~/application/ui && sh run.sh
+
+# cd ~/application/speed-layer && sh run.sh
 ```
 
+The batch layer scripts:
+- Download [Twosides data](http://tatonettilab.org/resources/nsides/) and extract the data
+- Ingest the raw csv data into HDFS
+- Create Hive table containg the raw csv data
+- Copy the raw Hive table into a new table in ORC formaat
 
+The serving layer scripts:
+- Create an external HBase table from the ORC table
+
+*The ui scripts (coming soon)*:
+- Starts the Node.js web application on localhost:30000/side-effects.html
+- Make calls to Hbase tables to GET and PUT data
 
 
 ## To run from scratch on the cloud:
