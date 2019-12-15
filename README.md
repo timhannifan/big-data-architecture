@@ -7,16 +7,14 @@ The intention is twofold: to demonstrate the layers of the lambda architecture, 
 
 
 
-
-
 ## To run locally:
 
-1. Clone and copy to Docker container.
+1. Clone this repo. The second line runs a script to start Docker, copy the source code to the container, and log in aas the root user.
 ```
 git clone https://github.com/timhannifan/big-data-architecture 
 cd big-data-architecture && run_docker.sh
 ```
-2. Add permissions to app directory for hadoop user. Ensure xz-utils is installed.
+2. Install prerequisites. Add permissions to application directory for hadoop user.
 ```
 sudo apt-get install xz-utils
 sudo chown -R hadoop:hadoop /home/hadoop/application/
@@ -27,15 +25,20 @@ sudo su hadoop
 start-all.sh
 start-hbase.sh
 ```
-4. Run the layers.
+4. Run the batch layer.
 ```
 cd ~/application/batch-layer && sh run.sh
+```
 
-cd ~/application/serving-layer && sh run.sh
+5. Create a Hbase table for the serving layer, then create serving views.
 
-# cd ~/application/ui && sh run.sh
+```
+$ hbase shell
+create 'twosides_hbase', 'interactions'
+create 'twosides_conditions', 'c'
+exit
 
-# cd ~/application/speed-layer && sh run.sh
+$ sh run.sh
 ```
 
 The batch layer scripts:
@@ -48,19 +51,16 @@ The serving layer scripts:
 - Create an external HBase table from the ORC table
 
 *The ui scripts (coming soon)*:
-- Starts the Node.js web application on localhost:30000/side-effects.html
-- Make calls to Hbase tables to GET and PUT data
+- *Starts the Node.js web application on localhost:30000/side-effects.html*
+- *Make calls to Hbase tables to GET and PUT data*
 
 
 ## To run from scratch on the cloud:
 
 1. Generate the batch layer: ingest csv to HDFS and use Hive to create batch views
 ```
-
-
-
 git clone https://github.com/timhannifan/big-data-architecture
-cd /big-data-architecture/src/batch-layer]
+cd /big-data-architecture/src/batch-layer
 sh run.sh
 ```
 
@@ -70,7 +70,6 @@ Create new column family in hbase for our daata
 ```
 hbase shell
 > create 'hannifan_final', 'interactions'
-create 'hannifan_final_grouped', 'interactions'
 ```
 
 Then run the hive scripts in the serving layer directory to create HBase views:

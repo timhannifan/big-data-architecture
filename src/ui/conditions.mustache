@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+  <head>
+    <title>Conditions</title>
+    <link type="text/css" rel="stylesheet" href="table.css" />
+  </head>
+  <body>
+    
+    <p style="bottom-margin:10px">
+      <table class="CSS_Table_Example" style="width:60%;margin:auto;">
+        <tr>
+          <td>Condition Name</td>
+          <td>Known Interactions</td>
+          <td>PRR Mu</td>
+          <td>PRR Sigma</td>
+          <td>Mean Reporting Frequency</td>
+        </tr>
+        {{#rows}}
+          <tr>
+            <td>{{condition_name}}</td>
+            <td>{{count}}</td>
+            <td>{{mean_prr}}</td>
+            <td>{{mean_prr_err}}</td>
+            <td>{{mean_reporting_frequency}}</td>
+          </tr>
+        {{/rows}}
+      </table>
+    </p>
+</body></html>

@@ -14,7 +14,7 @@ CREATE EXTERNAL TABLE hannifan_interactions (
   mean_reporting_frequency float)
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
 WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,interactions:drug_2_name,interactions:condition_name,interactions:A,interactions:B,interactions:C,interactions:D,interactions:prr,interactions:prr_err,interactions:mean_reporting_frequency')
-TBLPROPERTIES ('hbase.table.name' = 'hannifan_final');
+TBLPROPERTIES ('hbase.table.name' = 'twosides_hbase');
 
 insert overwrite table hannifan_interactions
 select drug_1_name,
