@@ -38,7 +38,13 @@ create 'twosides_hbase', 'interactions'
 create 'twosides_conditions', 'c'
 exit
 
-$ sh run.sh
+$ cd ~/application/serving-layer && sh run.sh
+```
+
+6. Start the web application
+
+```
+$ cd ~/application/ui && node app.js
 ```
 
 The batch layer scripts:
@@ -50,38 +56,41 @@ The batch layer scripts:
 The serving layer scripts:
 - Create an external HBase table from the ORC table
 
-*The ui scripts (coming soon)*:
-- *Starts the Node.js web application on localhost:30000/side-effects.html*
-- *Make calls to Hbase tables to GET and PUT data*
+The ui script:
+- Starts the Node.js web application on localhost:30000.
+- Generates tables with get requests to Hbase.
+- See `localhost:30000/conditions.html` for example.
+
+*The speed layer scripts:*
+- *Under construction*
 
 
 ## To run from scratch on the cloud:
 
 1. Generate the batch layer: ingest csv to HDFS and use Hive to create batch views
 ```
-git clone https://github.com/timhannifan/big-data-architecture
-cd /big-data-architecture/src/batch-layer
-sh run.sh
+git clone https://github.com/timhannifan/big-data-architecture ~/application
+cd ~/application/src/batch-layer && sh run.sh
 ```
 
 2. Generate the serving layer: use Hive to create HBase tables for API consumption
 
-Create new column family in hbase for our daata
+First create new column family in hbase for our data.
 ```
-hbase shell
-> create 'hannifan_final', 'interactions'
+$ hbase shell
+create 'twosides_hbase', 'interactions'
+create 'twosides_conditions', 'c'
 ```
 
 Then run the hive scripts in the serving layer directory to create HBase views:
 ```
-cd ../serving-layer
-sh run.sh
+cd /home/hadoop/application/src/serving-layer && sh run.sh
 ```
 
 3. Start Web application
-*Under construction*
+```
+cd /home/hadoop/application/src/ui && node app.js
+```
 
 4. Start Speed layer
 *Under construction*
-
-
