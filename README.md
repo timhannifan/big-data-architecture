@@ -11,8 +11,8 @@ The intention is twofold: to demonstrate the layers of the lambda architecture, 
 
 1. Clone this repo. The second line runs a script to start Docker, copy the source code to the container, and log in aas the root user.
 ```
-git clone https://github.com/timhannifan/big-data-architecture 
-cd big-data-architecture && run_docker.sh
+git clone https://github.com/timhannifan/big-data-architecture application
+cd application && run_docker.sh
 ```
 2. Install prerequisites. Add permissions to application directory for hadoop user.
 ```
@@ -34,8 +34,8 @@ cd ~/application/batch-layer && sh run.sh
 
 ```
 $ hbase shell
-create 'twosides_hbase', 'interactions'
-create 'twosides_conditions', 'c'
+create 'hannifan_twosides_hbase', 'interactions'
+create 'hannifan_twosides_conditions', 'c'
 exit
 
 $ cd ~/application/serving-layer && sh run.sh
@@ -75,22 +75,53 @@ cd ~/application/src/batch-layer && sh run.sh
 
 2. Generate the serving layer: use Hive to create HBase tables for API consumption
 
-First create new column family in hbase for our data.
+First create new column family in hbase for our complete data, then a separate view grouped by condition.
 ```
 $ hbase shell
-create 'twosides_hbase', 'interactions'
-create 'twosides_conditions', 'c'
+create 'hannifan_twosides_hbase', 'interactions'
+create 'hannifan_twosides_conditions', 'c'
+exit
 ```
 
 Then run the hive scripts in the serving layer directory to create HBase views:
 ```
-cd /home/hadoop/application/src/serving-layer && sh run.sh
+cd ~/application/src/serving-layer && sh run.sh
 ```
 
-3. Start Web application
+
+3. Start Speed layer
+- Create a kafka topic `hannifan_latest_interactions` for incoming data
 ```
-cd /home/hadoop/application/src/ui && node app.js
+cd /usr/hdp/current/kafka-broker/bin
+
+# Create a kafka topic named latest_interactions
+sh kafka-topics.sh --create --zookeeper mpcs53014c10-m-6-20191016152730.us-central1-a.c.mpcs53014-2019.internal:2181 --replication-factor 1 --partitions 1 --topic hannifan_latest_interactions
+
+# Check that it exits
+sh kafka-topics.sh --list --zookeeper mpcs53014c10-m-6-20191016152730.us-central1-a.c.mpcs53014-2019.internal:2181 | grep 'hannifan'
+
 ```
 
-4. Start Speed layer
-*Under construction*
+- Create a hbase table for the real-time (combined serving and speed) data
+```
+hbase shell
+hbase> create 'hannifan_realtime_interactions', 'interaction'
+```
+
+4. Start Web application on webserver
+```
+gcloud compute ssh hannifan@webserver
+
+## app is transfered from local machine. A copy exists on the webserver.
+cd ~/ui && node app.js
+```
+
+The application can be viewed at (this link on the cluster)[http://34.66.189.234:3584/conditions.html].
+
+
+5. To simulate the speed layer, go to the form on the website and enter information. It will be send via the kafka topic hannifan_latest_interactions, then consumed via a spark job and added to the hbase table hannifan_realtime_interactions.
+
+
+
+(Submission form)[http://34.66.189.234:3584/report.html] 
+
