@@ -60,9 +60,9 @@ app.get('/conditions.html',function (req, res) {
 
 app.get('/submit.html',function (req, res) {
     var report = {
+      reaction : req.query['reaction'],
       drug_1_name : req.query['drug_1_name'],
-      drug_2_name : req.query['drug_2_name'],
-      reaction : req.query['reaction']
+      drug_2_name : req.query['drug_2_name']
     };
 
     kafkaProducer.send([{ 
@@ -70,9 +70,9 @@ app.get('/submit.html',function (req, res) {
         messages: JSON.stringify(report)}],
          function (err, data) {
              console.log(data);
-         });
-    // console.log(report);
-    // res.redirect('conditions.html');
+    });
+    console.log(report);
+    res.redirect('conditions.html');
 });
 
 console.log('Listening on port ' + port)  

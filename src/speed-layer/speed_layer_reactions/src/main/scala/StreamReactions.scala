@@ -26,7 +26,7 @@ object StreamReactions {
   // hbaseConf.set("hbase.zookeeper.quorum", "localhost")
   
   val hbaseConnection = ConnectionFactory.createConnection(hbaseConf)
-  val table = hbaseConnection.getTable(TableName.valueOf("hannifan_realtime_interactions"))
+  val table = hbaseConnection.getTable(TableName.valueOf("hannifan_hbase_realtime"))
   
   def main(args: Array[String]) {
     if (args.length < 1) {
@@ -58,8 +58,8 @@ object StreamReactions {
     // How to write to an HBase table
     val batchStats = reports.map(wr => {
       val put = new Put(Bytes.toBytes(wr.reaction))
-      put.addColumn(Bytes.toBytes("report"), Bytes.toBytes("drug_1_name"), Bytes.toBytes(wr.drug_1_name))
-      put.addColumn(Bytes.toBytes("report"), Bytes.toBytes("drug_2_name"), Bytes.toBytes(wr.drug_2_name))
+      put.addColumn(Bytes.toBytes("reactions"), Bytes.toBytes("drug_1_name"), Bytes.toBytes(wr.drug_1_name))
+      put.addColumn(Bytes.toBytes("reactions"), Bytes.toBytes("drug_2_name"), Bytes.toBytes(wr.drug_2_name))
       table.put(put)
     })
     batchStats.print()

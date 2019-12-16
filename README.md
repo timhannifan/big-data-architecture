@@ -105,7 +105,7 @@ sh kafka-topics.sh --list --zookeeper mpcs53014c10-m-6-20191016152730.us-central
 - Create a hbase table for the real-time (combined serving and speed) data
 ```
 hbase shell
-hbase> create 'hannifan_realtime_interactions', 'interaction'
+hbase> create 'hannifan_hbase_realtime', 'reactions'
 ```
 
 4. Start Web application on webserver
@@ -117,6 +117,13 @@ cd ~/ui && node app.js
 ```
 
 The application can be viewed at (this link on the cluster)[http://34.66.189.234:3584/conditions.html].
+
+5. Run the streaming jar with spark-submit
+```
+cd ~/application/src/speed-layer/speed_layer_reactions/target
+
+spark-submit --class StreamReactions uber-speed_layer_reactions-0.0.1-SNAPSHOT.jar mpcs53014c10-m-6-20191016152730.us-central1-a.c.mpcs53014-2019.internal:6667
+```
 
 
 5. To simulate the speed layer, go to the form on the website and enter information. It will be send via the kafka topic hannifan_latest_interactions, then consumed via a spark job and added to the hbase table hannifan_realtime_interactions.
