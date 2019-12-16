@@ -25,7 +25,7 @@ The speed layer scripts:
 - The StreamReactions scala object runs in the background via spark-submit. This program reads in from the kafka broker and writes a speed table on hbase.
 
 
-## To on the cluster:
+## Running on the cluster:
 
 1. Generate the batch layer: ingest csv to HDFS and use Hive to create batch views
 ```
@@ -50,6 +50,7 @@ cd ~/application/src/serving-layer && sh run.sh
 
 
 3. Start Speed layer
+
 Create a kafka topic `hannifan_latest_interactions` for incoming data
 ```
 cd /usr/hdp/current/kafka-broker/bin
@@ -76,12 +77,11 @@ gcloud compute ssh hannifan@webserver
 cd ~/ui && node app.js
 ```
 
-The application can be viewed at (this link on the cluster)[http://34.66.189.234:3584/conditions.html].
+The application can be viewed at [this link on the cluster](http://34.66.189.234:3584/conditions.html).
 
 
-5. To simulate the speed layer, go to `/report.html` on the website and submit the default information. It will be sent to the kafka topic hannifan_latest_interactions, then consumed via a spark job and added to the hbase table hannifan_hbase_realtime. To kick off the spark job:
+5. To simulate the speed layer, go to the [submission form](http://34.66.189.234:3584/report.html) and submit the default information. It will be sent to the kafka topic hannifan_latest_interactions, then consumed via a spark job and added to the hbase table hannifan_hbase_realtime. To kick off the spark job:
 
-(Submission form)[http://34.66.189.234:3584/report.html] 
 ```
 cd ~/application/src/speed-layer/speed_layer_reactions/target
 
@@ -89,7 +89,7 @@ spark-submit --class StreamReactions uber-speed_layer_reactions-0.0.1-SNAPSHOT.j
 ```
 
 
-## To run locally in a Docker container:
+## Running locally in a Docker container:
 
 1. Clone this repo. The second line runs a script to start Docker, copy the source code to the container, and log in aas the root user.
 ```
